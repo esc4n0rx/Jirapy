@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: jirapy
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: JIRA_EMAIL
+        fromSecret: JIRA_EMAIL
+      - key: JIRA_TOKEN
+        fromSecret: JIRA_TOKEN
+      - key: SECRET_KEY
+        generateValue: true
