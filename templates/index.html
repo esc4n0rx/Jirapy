@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jira Issues Fetcher</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-bug"></i> Jira Issues Fetcher</h1>
+            <div class="header-controls">
+                <!-- Status de Configuração -->
+                <div class="config-status">
+                    {% if config.email_configured and config.token_configured %}
+                        <span class="status-badge success">
+                            <i class="fas fa-check-circle"></i>
+                            Configurado: {{ config.email_preview }}
+                        </span>
+                    {% else %}
+                        <span class="status-badge error">
+                            <i class="fas fa-exclamation-circle"></i>
+                            Configuração pendente
+                        </span>
+                    {% endif %}
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Alert de configuração se necessário -->
+        {% if not config.email_configured or not config.token_configured %}
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+                <strong>Configuração Necessária</strong>
+                <p>Configure as variáveis <code>JIRA_EMAIL</code> e <code>JIRA_TOKEN</code> no arquivo <code>.env</code> para usar a aplicação.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Cards de Relatórios -->
+        <section class="reports-section">
+            <div class="cards-grid">
+                <!-- Divergências -->
+                <div class="card report-card" data-type="divergencias">
+                    <div class="card-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Divergências</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Relatório de divergências por período</p>
+                        <div class="date-inputs">
+                            <div class="form-group">
+                                <label for="start_date">Data Início:</label>
+                                <input type="date" id="start_date" name="start_date">
+                            </div>
+                            <div class="form-group">
+                                <label for="end_date">Data Fim:</label>
+                                <input type="date" id="end_date" name="end_date">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="fetchData('divergencias')" 
+                                {% if not config.email_configured or not config.token_configured %}disabled{% endif %}>
+                            <i class="fas fa-download"></i> Buscar Divergências
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Avarias -->
+                <div class="card report-card" data-type="avarias">
+                    <div class="card-header">
+                        <i class="fas fa-broken-heart"></i>
+                        <h3>Avarias</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Relatório de avarias na entrega</p>
+                        <button class="btn btn-primary" onclick="fetchData('avarias')"
+                                {% if not config.email_configured or not config.token_configured %}disabled{% endif %}>
+                            <i class="fas fa-download"></i> Buscar Avarias
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Qualidade -->
+                <div class="card report-card" data-type="qualidade">
+                    <div class="card-header">
+                        <i class="fas fa-star"></i>
+                        <h3>Qualidade</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Relatório de qualidade</p>
+                        <button class="btn btn-primary" onclick="fetchData('qualidade')"
+                                {% if not config.email_configured or not config.token_configured %}disabled{% endif %}>
+                            <i class="fas fa-download"></i> Buscar Qualidade
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Devoluções -->
+                <div class="card report-card" data-type="devolucoes">
+                    <div class="card-header">
+                        <i class="fas fa-undo"></i>
+                        <h3>Devoluções</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Relatório de devoluções</p>
+                        <button class="btn btn-primary" onclick="fetchData('devolucoes')"
+                                {% if not config.email_configured or not config.token_configured %}disabled{% endif %}>
+                            <i class="fas fa-download"></i> Buscar Devoluções
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Resultados -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-table"></i> Resultados</h3>
+                    <button class="btn btn-success" id="downloadBtn" onclick="downloadExcel()">
+                        <i class="fas fa-file-excel"></i> Download Excel
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="results-info">
+                        <span id="resultsCount">0 registros encontrados</span>
+                    </div>
+                    <div class="table-container">
+                        <table id="resultsTable">
+                            <thead id="tableHead"></thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Buscando dados...</p>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast">
+            <div class="toast-content">
+                <i class="toast-icon"></i>
+                <span class="toast-message"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
