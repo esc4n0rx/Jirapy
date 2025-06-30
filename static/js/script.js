@@ -51,7 +51,7 @@ function showToast(message, type = 'success') {
     }, 4000);
 }
 
-// Fetch data from API
+// Fetch data from API and auto-download
 async function fetchData(type) {
     let requestData = {
         type: type
@@ -87,8 +87,14 @@ async function fetchData(type) {
         if (result.success) {
             currentData = result.data;
             currentType = type;
-            displayResults(result.data, result.count, type);
-            showToast(result.message, 'success');
+            
+            showToast(`${result.count} registros encontrados. Iniciando download...`, 'success');
+            
+            // Auto-download após sucesso
+            setTimeout(() => {
+                downloadExcel();
+            }, 1000);
+            
         } else {
             showToast(result.message, 'error');
             
@@ -112,77 +118,6 @@ function highlightConfigAlert() {
     if (alert) {
         alert.style.animation = 'pulse 1s ease-in-out 3';
     }
-}
-
-// Display results in table
-function displayResults(data, count, type) {
-    const resultsSection = document.getElementById('resultsSection');
-    const resultsCount = document.getElementById('resultsCount');
-    const tableHead = document.getElementById('tableHead');
-    const tableBody = document.getElementById('tableBody');
-    
-    // Show results section
-    resultsSection.style.display = 'block';
-    resultsSection.classList.add('fade-in');
-    
-    // Update count
-    resultsCount.textContent = `${count} registros encontrados`;
-    
-    // Clear previous results
-    tableHead.innerHTML = '';
-    tableBody.innerHTML = '';
-    
-    if (data.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="100%" style="text-align: center; padding: 20px;">Nenhum resultado encontrado</td></tr>';
-        return;
-    }
-    
-    // Create table headers
-    const headers = Object.keys(data[0]);
-    const headerRow = document.createElement('tr');
-    
-    headers.forEach(header => {
-        const th = document.createElement('th');
-        th.textContent = header;
-        headerRow.appendChild(th);
-    });
-    
-    tableHead.appendChild(headerRow);
-    
-    // Create table rows
-    data.forEach((row, index) => {
-        const tr = document.createElement('tr');
-        tr.style.animationDelay = `${index * 0.05}s`;
-        tr.classList.add('fade-in');
-        
-        headers.forEach(header => {
-            const td = document.createElement('td');
-            const value = row[header];
-            
-            // Handle different data types
-            if (value === null || value === undefined || value === '') {
-                td.textContent = '-';
-                td.style.color = 'var(--text-muted)';
-            } else if (typeof value === 'string' && value.includes('\n')) {
-                // Handle multiline text
-                td.innerHTML = value.replace(/\n/g, '<br>');
-            } else {
-                td.textContent = value;
-            }
-            
-            tr.appendChild(td);
-        });
-        
-        tableBody.appendChild(tr);
-    });
-    
-    // Scroll to results
-    setTimeout(() => {
-        resultsSection.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-        });
-    }, 300);
 }
 
 // Download Excel file
@@ -322,15 +257,7 @@ function initKeyboardShortcuts() {
             }
         }
         
-        // Escape to close results
-        if (e.key === 'Escape') {
-            const resultsSection = document.getElementById('resultsSection');
-            if (resultsSection.style.display === 'block') {
-                resultsSection.style.display = 'none';
-            }
-        }
-        
-        // Ctrl/Cmd + D to download
+        // Ctrl/Cmd + D to download (apenas se houver dados)
         if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
             e.preventDefault();
             if (currentData.length > 0) {
@@ -360,19 +287,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeButtons();
     initKeyboardShortcuts();
     addPulseAnimation();
-    
-    // Add smooth scrolling to all anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
     
     console.log('Jira Issues Fetcher initialized successfully!');
 });

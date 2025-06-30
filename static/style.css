@@ -254,63 +254,6 @@ body {
    box-shadow: none;
 }
 
-/* Results Section */
-.results-section {
-   margin-top: 30px;
-}
-
-.results-section .card-header {
-   justify-content: space-between;
-   align-items: center;
-   flex-wrap: wrap;
-   gap: 15px;
-}
-
-.results-info {
-   margin-bottom: 15px;
-   padding: 10px;
-   background: var(--hover-color);
-   border-radius: 6px;
-   font-weight: 600;
-   color: var(--text-color);
-}
-
-.table-container {
-   overflow-x: auto;
-   border-radius: 8px;
-   border: 1px solid var(--border-color);
-}
-
-#resultsTable {
-   width: 100%;
-   border-collapse: collapse;
-   font-size: 0.9rem;
-}
-
-#resultsTable th,
-#resultsTable td {
-   padding: 12px;
-   text-align: left;
-   border-bottom: 1px solid var(--border-color);
-}
-
-#resultsTable th {
-   background: var(--hover-color);
-   font-weight: 600;
-   color: var(--text-color);
-   position: sticky;
-   top: 0;
-   z-index: 10;
-}
-
-#resultsTable tr:hover {
-   background: var(--hover-color);
-}
-
-#resultsTable td {
-   color: var(--text-color);
-}
-
 /* Loading */
 .loading-overlay {
    position: fixed;
@@ -413,102 +356,6 @@ body {
    color: var(--success-color);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-   .container {
-       padding: 10px;
-   }
-   
-   .header h1 {
-       font-size: 1.5rem;
-   }
-   
-   .cards-grid {
-       grid-template-columns: 1fr;
-   }
-   
-   .date-inputs {
-       flex-direction: column;
-   }
-   
-   .results-section .card-header {
-       flex-direction: column;
-       align-items: stretch;
-   }
-   
-   .table-container {
-       font-size: 0.8rem;
-   }
-   
-   #resultsTable th,
-   #resultsTable td {
-       padding: 8px;
-   }
-   
-   .toast {
-       top: 10px;
-       right: 10px;
-       left: 10px;
-       max-width: none;
-       transform: translateY(-100px);
-   }
-   
-   .toast.show {
-       transform: translateY(0);
-   }
-}
-
-/* Scrollbar customization */
-::-webkit-scrollbar {
-   width: 8px;
-   height: 8px;
-}
-
-::-webkit-scrollbar-track {
-   background: var(--hover-color);
-   border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-   background: var(--text-muted);
-   border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-   background: var(--primary-color);
-}
-
-/* Animation classes */
-.fade-in {
-   animation: fadeIn 0.5s ease-in;
-}
-
-@keyframes fadeIn {
-   from {
-       opacity: 0;
-       transform: translateY(20px);
-   }
-   to {
-       opacity: 1;
-       transform: translateY(0);
-   }
-}
-
-.slide-in {
-   animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-   from {
-       transform: translateX(100%);
-   }
-   to {
-       transform: translateX(0);
-   }
-}
-
-/* ... código CSS anterior ... */
-
 /* Header Controls */
 .header-controls {
     display: flex;
@@ -587,8 +434,36 @@ body {
     font-size: 0.9em;
 }
 
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 768px) {
+   .container {
+       padding: 10px;
+   }
+   
+   .header h1 {
+       font-size: 1.5rem;
+   }
+   
+   .cards-grid {
+       grid-template-columns: 1fr;
+   }
+   
+   .date-inputs {
+       flex-direction: column;
+   }
+   
+   .toast {
+       top: 10px;
+       right: 10px;
+       left: 10px;
+       max-width: none;
+       transform: translateY(-100px);
+   }
+   
+   .toast.show {
+       transform: translateY(0);
+   }
+   
    .header-controls {
        flex-direction: column;
        gap: 10px;
@@ -628,4 +503,60 @@ body {
    .status-badge::after {
        content: attr(data-short);
    }
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+   width: 8px;
+   height: 8px;
+}
+
+::-webkit-scrollbar-track {
+   background: var(--hover-color);
+   border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+   background: var(--text-muted);
+   border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+   background: var(--primary-color);
+}
+
+/* Animation classes */
+.fade-in {
+   animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+      transform: translateX(100%);
+  }
+  to {
+      transform: translateX(0);
+  }
+}
+
+/* Animation classes */
+@keyframes pulse {
+   0% { transform: scale(1); }
+   50% { transform: scale(1.02); }
+   100% { transform: scale(1); }
 }

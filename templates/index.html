@@ -53,7 +53,7 @@
                         <h3>Divergências</h3>
                     </div>
                     <div class="card-body">
-                        <p>Relatório de divergências por período</p>
+                        <p>Relatório de divergências por período - Download automático após busca</p>
                         <div class="date-inputs">
                             <div class="form-group">
                                 <label for="start_date">Data Início:</label>
@@ -66,7 +66,7 @@
                         </div>
                         <button class="btn btn-primary" onclick="fetchData('divergencias')" 
                                 {% if not config.email_configured or not config.token_configured %}disabled{% endif %}>
-                            <i class="fas fa-download"></i> Buscar Divergências
+                            <i class="fas fa-download"></i> Buscar e Baixar
                         </button>
                     </div>
                 </div>
@@ -78,10 +78,10 @@
                         <h3>Avarias</h3>
                     </div>
                     <div class="card-body">
-                        <p>Relatório de avarias na entrega</p>
+                        <p>Relatório de avarias na entrega - Download automático após busca</p>
                         <button class="btn btn-primary" onclick="fetchData('avarias')"
                                 {% if not config.email_configured or not config.token_configured %}disabled{% endif %}>
-                            <i class="fas fa-download"></i> Buscar Avarias
+                            <i class="fas fa-download"></i> Buscar e Baixar
                         </button>
                     </div>
                 </div>
@@ -93,10 +93,10 @@
                         <h3>Qualidade</h3>
                     </div>
                     <div class="card-body">
-                        <p>Relatório de qualidade</p>
+                        <p>Relatório de qualidade - Download automático após busca</p>
                         <button class="btn btn-primary" onclick="fetchData('qualidade')"
                                 {% if not config.email_configured or not config.token_configured %}disabled{% endif %}>
-                            <i class="fas fa-download"></i> Buscar Qualidade
+                            <i class="fas fa-download"></i> Buscar e Baixar
                         </button>
                     </div>
                 </div>
@@ -108,34 +108,11 @@
                         <h3>Devoluções</h3>
                     </div>
                     <div class="card-body">
-                        <p>Relatório de devoluções</p>
+                        <p>Relatório de devoluções - Download automático após busca</p>
                         <button class="btn btn-primary" onclick="fetchData('devolucoes')"
                                 {% if not config.email_configured or not config.token_configured %}disabled{% endif %}>
-                            <i class="fas fa-download"></i> Buscar Devoluções
+                            <i class="fas fa-download"></i> Buscar e Baixar
                         </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção de Resultados -->
-        <section class="results-section" id="resultsSection" style="display: none;">
-            <div class="card">
-                <div class="card-header">
-                    <h3><i class="fas fa-table"></i> Resultados</h3>
-                    <button class="btn btn-success" id="downloadBtn" onclick="downloadExcel()">
-                        <i class="fas fa-file-excel"></i> Download Excel
-                    </button>
-                </div>
-                <div class="card-body">
-                    <div class="results-info">
-                        <span id="resultsCount">0 registros encontrados</span>
-                    </div>
-                    <div class="table-container">
-                        <table id="resultsTable">
-                            <thead id="tableHead"></thead>
-                            <tbody id="tableBody"></tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -145,7 +122,7 @@
         <div class="loading-overlay" id="loadingOverlay">
             <div class="loading-spinner">
                 <i class="fas fa-spinner fa-spin"></i>
-                <p>Buscando dados...</p>
+                <p>Buscando e preparando dados para download...</p>
             </div>
         </div>
 
